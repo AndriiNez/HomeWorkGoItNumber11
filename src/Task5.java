@@ -1,4 +1,4 @@
-import java.util.Iterator;
+import java.util.*;
 
 import java.util.stream.Stream;
 
@@ -9,29 +9,15 @@ public class Task5 {
         Iterator<T> firstIterator = first.iterator();
         Iterator<T> secondIterator = second.iterator();
 
-        Iterator<T> zippedIterator = new Iterator<T>() {
-            private boolean isFirst = true;
+        List<T> result = new ArrayList<>();
+        while (firstIterator.hasNext() && secondIterator.hasNext()) {
+            result.add(firstIterator.next());
+            result.add(secondIterator.next());
+        }
 
-            @Override
-            public boolean hasNext() {
-                return isFirst || firstIterator.hasNext() || secondIterator.hasNext();
-            }
+        Collections.shuffle(result);
 
-            @Override
-            public T next() {
-                if (isFirst) {
-                    isFirst = false;
-                    return firstIterator.next();
-                }
-                if (firstIterator.hasNext()) {
-                    isFirst = true;
-                    return secondIterator.next();
-                }
-                return secondIterator.next();
-            }
-        };
-
-        return Stream.generate(zippedIterator::next).takeWhile(e -> zippedIterator.hasNext());
+        return result.stream();
     }
 
     public static void main(String[] args) {
